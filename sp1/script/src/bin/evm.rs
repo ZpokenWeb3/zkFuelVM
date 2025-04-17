@@ -57,7 +57,7 @@ fn main() {
     let args = EVMArgs::parse();
 
     // Setup the prover client.
-    let client = ProverClient::new();
+    let client = ProverClient::from_env();
 
     // Setup the program.
     let (pk, vk) = client.setup(FUEL_VM_ELF);
@@ -71,8 +71,8 @@ fn main() {
 
     // Generate the proof based on the selected proof system.
     let proof = match args.system {
-        ProofSystem::Plonk => client.prove(&pk, stdin).plonk().run(),
-        ProofSystem::Groth16 => client.prove(&pk, stdin).groth16().run(),
+        ProofSystem::Plonk => client.prove(&pk, &stdin).plonk().run(),
+        ProofSystem::Groth16 => client.prove(&pk, &stdin).groth16().run(),
     }
     .expect("failed to generate proof");
 
